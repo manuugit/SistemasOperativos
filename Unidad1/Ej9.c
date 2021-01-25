@@ -1,4 +1,5 @@
 //analizar funcionamiento del programa (retorno de scanf)
+//se completa el codigo para correccion
 #include <stdio.h>
 
 int main(void)
