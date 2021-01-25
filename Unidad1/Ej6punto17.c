@@ -1,4 +1,4 @@
-//programa usando funciones fscanf, fprintf, fgetc, fputc
+//programa usando funciones fscanf, fprintf, fgets, fputs
 //lee numeros (por linea) desde un archivo, calcula la suma y la escribe
 #include <stdio.h>
 #include <stdlib.h>
