@@ -31,6 +31,7 @@ int existebd=0;
 int main(void){
     mkdb("based",3);
     loaddb("/home/manuela/SistemasOperativos/Unidad1/estudiantes.txt");
+    savedb("bdsalida.txt");
     return 0;
 }
 
@@ -76,9 +77,6 @@ void loaddb(char archivo[32]){
                     linea++;
                 }
         }
-        for (int i=0; i<bd.tamaño; i++){
-          printf("%d  %s %d\n",pbd->registroEstudiante[i].cedula,pbd->registroEstudiante[i].nombre,pbd->registroEstudiante[i].semestre);
-        }
         fclose(archivof);  //cerrar archivo
         printf("%s\n","La base de datos fue cargada correctamente");
         }
@@ -91,10 +89,19 @@ void loaddb(char archivo[32]){
 
 void savedb(char archivoSalida[32]){
     //abrir archivo para escritura
-    /*FILE *archivoS =fopen(archivoSalida,"w");
+    FILE *archivoS =fopen(archivoSalida,"w");
     if (archivoSalida == NULL) {
-        perror("Error: ");
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
-    for (int i=0; i)*/
+    fprintf(archivoS,"ESTUDIANTES\n");
+    fprintf(archivoS,"Cédula|Nombre|Semestre\n");
+    for (int i=0; i< (pbd->tamaño); i++){
+        fprintf(archivoS,"%d ",pbd->registroEstudiante[i].cedula);
+        fprintf(archivoS,"%s ",pbd->registroEstudiante[i].nombre);
+        fprintf(archivoS,"%d\n",pbd->registroEstudiante[i].semestre);
+    }
+
+    fclose(archivoS);
+
+    printf("%s %s %s %s\n", "La base de datos",pbd->nombrebd,"se escribió en el archivo",archivoSalida);
 }
