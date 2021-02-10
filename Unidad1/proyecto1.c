@@ -20,18 +20,21 @@ typedef struct bd{
 bd_t mkdb(char[32], int);
 void loaddb(char[32]);
 void savedb(char[32]);
+void readall(void);
+int readsize(void);
 
 estudiante_t est;
 estudiante_t *pest = &est;
 bd_t bd;
 bd_t *pbd = &bd;
-bd_t *buffer;
 int existebd=0;
 
 int main(void){
     mkdb("based",3);
     loaddb("/home/manuela/SistemasOperativos/Unidad1/estudiantes.txt");
     savedb("bdsalida.txt");
+    readall();
+    printf("%s %d\n","Cantidad registros",readsize());
     return 0;
 }
 
@@ -104,4 +107,17 @@ void savedb(char archivoSalida[32]){
     fclose(archivoS);
 
     printf("%s %s %s %s\n", "La base de datos",pbd->nombrebd,"se escribió en el archivo",archivoSalida);
+}
+
+void readall(void){
+    printf("%s %s\n","Registros en DB",pbd->nombrebd);
+    for (int i=0; i< (pbd->tamaño); i++){
+        printf("%d ",pbd->registroEstudiante[i].cedula);
+        printf("%s ",pbd->registroEstudiante[i].nombre);
+        printf("%d\n",pbd->registroEstudiante[i].semestre);
+    }
+}
+
+int readsize(void){
+    return pbd->tamaño;
 }
