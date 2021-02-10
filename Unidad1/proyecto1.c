@@ -14,6 +14,7 @@ typedef struct bd{
     int tamaño;
     char nombrebd[32];
     estudiante_t *registroEstudiante;
+    int conteoEst;
 } bd_t;
 
 //prototipado de funciones
@@ -22,6 +23,9 @@ void loaddb(char[32]);
 void savedb(char[32]);
 void readall(void);
 int readsize(void);
+void mkreg(int, char[32], int);
+void readreg(int);
+//void exit(void);
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -30,11 +34,22 @@ bd_t *pbd = &bd;
 int existebd=0;
 
 int main(void){
-    mkdb("based",3);
+    char comando [32];
+    char par1 [20];
+    char par2 [20];
+    char par3 [20];
+
+   
+    
+    mkdb("based",50);
     loaddb("/home/manuela/SistemasOperativos/Unidad1/estudiantes.txt");
     savedb("bdsalida.txt");
     readall();
     printf("%s %d\n","Cantidad registros",readsize());
+    mkreg(40123968, "Camilo-Montoya", 8);
+    readall();
+    readreg(100074579);
+    //printf("%dTamaño\n",bd.tamaño);
     return 0;
 }
 
@@ -79,6 +94,7 @@ void loaddb(char archivo[32]){
                     control=0;
                     linea++;
                 }
+                pbd->conteoEst = linea;
         }
         fclose(archivof);  //cerrar archivo
         printf("%s\n","La base de datos fue cargada correctamente");
@@ -96,9 +112,9 @@ void savedb(char archivoSalida[32]){
     if (archivoSalida == NULL) {
         exit(EXIT_FAILURE);
     }
-    fprintf(archivoS,"ESTUDIANTES\n");
-    fprintf(archivoS,"Cédula|Nombre|Semestre\n");
-    for (int i=0; i< (pbd->tamaño); i++){
+    fputs("ESTUDIANTES\n",archivoS);
+    fputs("Cédula|Nombre|Semestre\n",archivoS);
+    for (int i=0; i< (pbd->conteoEst); i++){
         fprintf(archivoS,"%d ",pbd->registroEstudiante[i].cedula);
         fprintf(archivoS,"%s ",pbd->registroEstudiante[i].nombre);
         fprintf(archivoS,"%d\n",pbd->registroEstudiante[i].semestre);
@@ -110,8 +126,7 @@ void savedb(char archivoSalida[32]){
 }
 
 void readall(void){
-    printf("%s %s\n","Registros en DB",pbd->nombrebd);
-    for (int i=0; i< (pbd->tamaño); i++){
+    for (int i=0; i< (bd.conteoEst); i++){
         printf("%d ",pbd->registroEstudiante[i].cedula);
         printf("%s ",pbd->registroEstudiante[i].nombre);
         printf("%d\n",pbd->registroEstudiante[i].semestre);
@@ -119,5 +134,31 @@ void readall(void){
 }
 
 int readsize(void){
-    return pbd->tamaño;
+    return pbd->conteoEst;
+}
+
+void mkreg(int cedula, char nombre[32], int semestre){
+    if (bd.conteoEst < bd.tamaño){
+        pbd->registroEstudiante[bd.conteoEst].cedula= cedula;
+        strcpy(pbd->registroEstudiante[bd.conteoEst].nombre,nombre);
+        pbd->registroEstudiante[bd.conteoEst].semestre= semestre;
+        bd.conteoEst = bd.conteoEst+1;
+    }
+    else{
+        printf("Ya se alcanzo la capacidad maxima de la base de datos");
+    }
+}
+
+void readreg(int cedula){
+    int encontro = 0;
+    for (int i=0; i< (pbd->tamaño); i++){
+        if (pbd->registroEstudiante[i].cedula == cedula){
+             printf("%d %s %d\n ",pbd->registroEstudiante[i].cedula,pbd->registroEstudiante[i].nombre,pbd->registroEstudiante[i].semestre);
+            encontro = 1;
+            i = bd.tamaño;
+        }
+    }
+    if(encontro !=1){
+        printf("Cedula no encontrada\n");
+    }
 }
