@@ -25,7 +25,7 @@ void readall(void);
 int readsize(void);
 void mkreg(int, char[32], int);
 void readreg(int);
-//void exit(void);
+char exitP(void);
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -38,18 +38,58 @@ int main(void){
     char par1 [20];
     char par2 [20];
     char par3 [20];
+    char salir;
+    char fileF [32];
 
-   
-    
-    mkdb("based",50);
-    loaddb("/home/manuela/SistemasOperativos/Unidad1/estudiantes.txt");
-    savedb("bdsalida.txt");
-    readall();
-    printf("%s %d\n","Cantidad registros",readsize());
-    mkreg(40123968, "Camilo-Montoya", 8);
-    readall();
-    readreg(100074579);
-    //printf("%dTamaño\n",bd.tamaño);
+     while(strcmp(comando,"exitP")!=0){
+        printf("\n%s","Escriba el comando\n");
+        scanf("\n%s",comando);
+        if (strcmp(comando,"mkdb")==0){
+            scanf("%s %s",par1,par2);
+            mkdb(par1, atoi(par2));
+        }
+        else if (strcmp(comando,"loaddb")==0){
+            scanf("%s",par1);
+            printf("%s\n",par1);
+            loaddb(par1);
+            strcpy(fileF, par1);
+        }
+        else if (strcmp(comando,"savedb")==0){
+            scanf("%s",par1);
+            savedb(par1);
+        }
+        else if (strcmp(comando,"readall")==0){
+            readall();
+        }
+        else if (strcmp(comando,"readsize")==0){
+            printf("%s %d","Cantidad de registros=",readsize());
+        }
+        else if (strcmp(comando,"mkreg")==0){
+            scanf("%s %s %s",par1,par2,par3);
+            mkreg(atoi(par1),par2, atoi(par3));
+        }
+        else if (strcmp(comando,"readreg")==0){
+            scanf("%s",par1);
+            readreg(atoi(par1));
+        }
+        else if (strcmp(comando,"exitP")==0){
+            printf("\n");
+        }
+        else{
+            printf("Opcion invalida\n");
+        }
+
+        printf("Si desea salir utilice el comando exitP\n");
+    }
+        
+    salir = exitP();
+     if (salir== 's'){
+        savedb(fileF);
+        printf("Los datos se guardaron correctamente\n");
+    }
+    else{
+        printf("Los datos no se guardaron\n");
+    }
     return 0;
 }
 
@@ -112,8 +152,8 @@ void savedb(char archivoSalida[32]){
     if (archivoSalida == NULL) {
         exit(EXIT_FAILURE);
     }
-    fputs("ESTUDIANTES\n",archivoS);
-    fputs("Cédula|Nombre|Semestre\n",archivoS);
+    fprintf(archivoS,"ESTUDIANTES\n");
+    fprintf(archivoS,"Cédula|Nombre|Semestre\n");
     for (int i=0; i< (pbd->conteoEst); i++){
         fprintf(archivoS,"%d ",pbd->registroEstudiante[i].cedula);
         fprintf(archivoS,"%s ",pbd->registroEstudiante[i].nombre);
@@ -161,4 +201,12 @@ void readreg(int cedula){
     if(encontro !=1){
         printf("Cedula no encontrada\n");
     }
+}
+
+char exitP(void){
+    char r,key;
+    scanf("%c",&key);
+    printf("%s\n", "¿Desea guardar los cambios de la base de datos en el archivo?\ns para si, n para no");
+    scanf("%c",&r);
+    return(r);
 }
