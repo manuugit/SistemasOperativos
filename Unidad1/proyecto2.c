@@ -30,6 +30,8 @@ void lsdbs();
 void gdb();
 void sdb(char[32]);
 void svdb();
+void radb();
+int rsdb();
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -55,6 +57,7 @@ int main(void){
     gdb();
     sdb("estu");
     svdb();
+    radb();
     free(plbd->pdatabase);
     return 0;
 }
@@ -159,3 +162,24 @@ void svdb(){
     }
 }
 
+void radb(){
+    if(activa ==1){
+        for (int i=0; i<(listabd.pdatabase+(listabd.conteobd-1))->conteoEst; i++){
+        printf("%d ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula);
+        printf("%s ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].nombre);
+        printf("%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].semestre);
+    }
+    }
+    else{
+        printf("%s\n","Antes de usar este comando debe aplicar sdb nombre");
+    }
+}
+
+int rsdb(){
+    if(activa ==1){
+        
+    }
+    else{
+        printf("%s\n","Antes de usar este comando debe aplicar sdb nombre");
+    }
+}
