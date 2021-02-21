@@ -33,6 +33,7 @@ void svdb();
 void radb();
 int rsdb();
 void mreg(int,char[52],int);
+void rr(int);
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -62,6 +63,7 @@ int main(void){
     printf("%d\n",rsdb());
     mreg(45789652,"Esteban-Arango",5);
     radb();
+    rr(100245679);
     free(plbd->pdatabase);
     return 0;
 }
@@ -190,13 +192,33 @@ int rsdb(){
 }
 
 void mreg(int cedula, char nombreEst[52],int semestre){
-    if ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst < (listabd.pdatabase+(listabd.conteobd-1))->tamaño){
-        (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].cedula= cedula;
-        strcpy((listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].nombre,nombreEst);
-        (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].semestre= semestre;
-        (listabd.pdatabase+(listabd.conteobd-1))->conteoEst = ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst)+1;
+    if (activa ==1){
+        if ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst < (listabd.pdatabase+(listabd.conteobd-1))->tamaño){
+            (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].cedula= cedula;
+            strcpy((listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].nombre,nombreEst);
+            (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].semestre= semestre;
+            (listabd.pdatabase+(listabd.conteobd-1))->conteoEst = ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst)+1;
+    }
+        else{
+            printf("Ya se alcanzo la capacidad maxima de la base de datos");
+        }
     }
     else{
-        printf("Ya se alcanzo la capacidad maxima de la base de datos");
+        printf("%s\n","Antes de usar este comando debe aplicar sdb nombre");
+    }
+    
+}
+
+void rr(int cedula){
+    int encontro = 0;
+    for (int i=0; i< ((listabd.pdatabase+(listabd.conteobd-1))->tamaño); i++){
+        if ((listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula == cedula){
+             printf("%d %s %d\n ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula,(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].nombre,(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].semestre);
+            encontro = 1;
+            i = (listabd.pdatabase+(listabd.conteobd-1))->tamaño;
+        }
+    }
+    if(encontro !=1){
+        printf("%s %s\n","Cedula no encontrada en",(listabd.pdatabase+(listabd.conteobd-1))->nombrebd);
     }
 }
