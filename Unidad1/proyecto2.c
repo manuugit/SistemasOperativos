@@ -32,6 +32,7 @@ void sdb(char[32]);
 void svdb();
 void radb();
 int rsdb();
+void mreg(int,char[52],int);
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -59,6 +60,8 @@ int main(void){
     svdb();
     radb();
     printf("%d\n",rsdb());
+    mreg(45789652,"Esteban-Arango",5);
+    radb();
     free(plbd->pdatabase);
     return 0;
 }
@@ -182,6 +185,18 @@ int rsdb(){
     }
     else{
         printf("%s\n","Antes de usar este comando debe aplicar sdb nombre");
-        return(0);
+        return(-1);
+    }
+}
+
+void mreg(int cedula, char nombreEst[52],int semestre){
+    if ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst < (listabd.pdatabase+(listabd.conteobd-1))->tamaño){
+        (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].cedula= cedula;
+        strcpy((listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].nombre,nombreEst);
+        (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].semestre= semestre;
+        (listabd.pdatabase+(listabd.conteobd-1))->conteoEst = ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst)+1;
+    }
+    else{
+        printf("Ya se alcanzo la capacidad maxima de la base de datos");
     }
 }
