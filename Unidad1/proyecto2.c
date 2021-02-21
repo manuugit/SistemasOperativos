@@ -58,6 +58,7 @@ int main(void){
     sdb("estu");
     svdb();
     radb();
+    printf("%d\n",rsdb());
     free(plbd->pdatabase);
     return 0;
 }
@@ -177,9 +178,10 @@ void radb(){
 
 int rsdb(){
     if(activa ==1){
-        
+        return (listabd.pdatabase+(listabd.conteobd-1))->conteoEst;
     }
     else{
         printf("%s\n","Antes de usar este comando debe aplicar sdb nombre");
+        return(0);
     }
 }
