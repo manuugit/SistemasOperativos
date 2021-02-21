@@ -34,6 +34,7 @@ void radb();
 int rsdb();
 void mreg(int,char[52],int);
 void rr(int);
+char exitP();
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -221,4 +222,12 @@ void rr(int cedula){
     if(encontro !=1){
         printf("%s %s\n","Cedula no encontrada en",(listabd.pdatabase+(listabd.conteobd-1))->nombrebd);
     }
+}
+
+char exitP(){
+    char r,key;
+    scanf("%c",&key);
+    printf("%s\n", "¿Desea guardar los cambios de la base de datos en el archivo?\ns para si, n para no");
+    scanf("%c",&r);
+    return(r);
 }
