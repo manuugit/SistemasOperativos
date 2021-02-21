@@ -29,6 +29,7 @@ void ldb(char[32]);
 void lsdbs();
 void gdb();
 void sdb(char[32]);
+void svdb();
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -53,6 +54,7 @@ int main(void){
     lsdbs();
     gdb();
     sdb("estu");
+    svdb();
     free(plbd->pdatabase);
     return 0;
 }
@@ -131,5 +133,29 @@ void sdb(char nombre[32]){
     activa=1;
     strcpy(archivoact,listabd.pdatabase[listabd.conteobd-1].nombrebd);
     strcat(archivoact,".txt");
+}
+
+void svdb(){
+    if (activa ==1){
+    //abrir archivo para escritura
+    FILE *archivoS =fopen(archivoact,"w");
+    if (archivoact== NULL) {
+        exit(EXIT_FAILURE);
+    }
+    fprintf(archivoS,"ESTUDIANTES\n");
+    fprintf(archivoS,"Cédula|Nombre|Semestre\n");
+    for (int i=0; i< ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst); i++){
+        fprintf(archivoS,"%d ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula);
+        fprintf(archivoS,"%s ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].nombre);
+        fprintf(archivoS,"%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].semestre);
+    }
+
+    fclose(archivoS);
+    printf("%s %s %s %s\n", "La base de datos",(listabd.pdatabase+(listabd.conteobd-1))->nombrebd,"se escribió en el archivo",archivoact);
+    }
+
+    else{
+        printf("%s\n","Antes de usar este comando debe aplicar sdb nombre");
+    }
 }
 
