@@ -27,6 +27,7 @@ typedef struct listabd{
 void mdb(char[32], int);
 void ldb(char[32]);
 void lsdbs();
+void gdb();
 
 estudiante_t est;
 estudiante_t *pest = &est;
@@ -47,6 +48,7 @@ int main(void){
     mdb("bd4",30);
     ldb("estudiantes2.txt");
     lsdbs();
+    gdb();
     free(plbd->pdatabase);
     return 0;
 }
@@ -106,10 +108,18 @@ void ldb(char archivo[32]){
 }
 
 void lsdbs(){
+    printf("%s\n","Bases de datos en memoria:");
     for(int i=0; i<listabd.conteobd; i++){
-        printf("%s ",listabd.pdatabase[i].nombrebd);
-        printf("%d ",listabd.pdatabase[i].tamaño);
-        printf("%d\n",listabd.pdatabase[i].conteoEst);
+        printf("%s %s|","Nombre",listabd.pdatabase[i].nombrebd);
+        printf("%s %d|","Tamaño max",listabd.pdatabase[i].tamaño);
+        printf("%s %d\n","Cantidad de registros",listabd.pdatabase[i].conteoEst);
     }
-   
 }
+
+void gdb(){
+    printf("%s\n","Base de datos activa:");
+    printf("%s %s|","Nombre",listabd.pdatabase[listabd.conteobd-1].nombrebd);
+    printf("%s %d|","Tamaño max",listabd.pdatabase[listabd.conteobd-1].tamaño);
+    printf("%s %d\n","Cantidad de registros disponibles",(listabd.pdatabase[listabd.conteobd-1].tamaño-listabd.pdatabase[listabd.conteobd-1].conteoEst));
+}
+
