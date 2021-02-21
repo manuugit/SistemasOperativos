@@ -15,6 +15,7 @@ typedef struct bd{
     char nombrebd[32];
     estudiante_t *registroEstudiante;
     int conteoEst;
+    int existebd;
 } bd_t;
 
 typedef struct listabd{
@@ -29,13 +30,8 @@ void lsdbs();
 
 estudiante_t est;
 estudiante_t *pest = &est;
-bd_t bd;
-bd_t *pbd = &bd;
 libd_t listabd;
 libd_t *plbd= &listabd;
-int indexbd=0;
-int cont=0;
-int existebd;
 
 int main(void){
     int maximobd =20;
@@ -50,19 +46,18 @@ int main(void){
     ldb("estudiantes3.txt");
     mdb("bd4",30);
     ldb("estudiantes2.txt");
-    //lsdbs();
+    lsdbs();
+    free(plbd->pdatabase);
     return 0;
 }
 
 //funciones
  void mdb(char nombrebd [32], int sizebd){
-    existebd =1;
     strcpy((listabd.pdatabase+listabd.conteobd)->nombrebd,nombrebd);
     (listabd.pdatabase+listabd.conteobd)->tamaño = sizebd;
+    (listabd.pdatabase+listabd.conteobd)->existebd = 1;
     listabd.conteobd++;
     (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante = (estudiante_t *)malloc(sizeof(estudiante_t)*(listabd.pdatabase+listabd.conteobd-1)->tamaño);
-    //indexbd++;
-    //cont++;
 }
 
 void ldb(char archivo[32]){
@@ -72,7 +67,7 @@ void ldb(char archivo[32]){
     int control=0;
 
     printf("%s %d\n","Base de datos activa:",listabd.conteobd-1);
-   // if(existebd==1){
+    if((listabd.pdatabase+(listabd.conteobd-1))->existebd == 1){
         //abrir archivo para lectura
         archivof = fopen(archivo,"r");
         //valida que no sea nulo
@@ -80,8 +75,7 @@ void ldb(char archivo[32]){
         printf("No se pudo abrir archivo \n%s", archivo);
         exit(EXIT_FAILURE);
         }
-        //reservar
-        
+
         linea = 0;
         //recorrer
         while(fgets(datos,sizeof(datos),archivof)!=NULL){ //lee cada linea
@@ -104,17 +98,18 @@ void ldb(char archivo[32]){
         }
         fclose(archivof);  //cerrar archivo
         printf("%s\n","La base de datos fue cargada correctamente");
-       // }
+     }
 
-        //else{
-           // printf("%s\n","La base de datos no se ha creado");
-       // }
-
-        printf("%s ",listabd.pdatabase[listabd.conteobd-1].nombrebd);
-        printf("%d ",listabd.pdatabase[listabd.conteobd-1].tamaño);
-        printf("%d\n",listabd.pdatabase[listabd.conteobd-1].conteoEst);
-    existebd=0;
+    else{
+        printf("%s\n","La base de datos no se ha creado");
+    }
 }
 
 void lsdbs(){
+    for(int i=0; i<listabd.conteobd; i++){
+        printf("%s ",listabd.pdatabase[i].nombrebd);
+        printf("%d ",listabd.pdatabase[i].tamaño);
+        printf("%d\n",listabd.pdatabase[i].conteoEst);
+    }
+   
 }
