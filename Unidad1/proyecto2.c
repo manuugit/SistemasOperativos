@@ -113,7 +113,7 @@ int main(void){
     else{
         printf("Los datos no se guardaron\n");
     }
-    
+
     free(plbd->pdatabase);
     return 0;
 }
@@ -149,15 +149,15 @@ void ldb(char archivo[32]){
                 control++;
                 if(control ==1){
                     (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].cedula= atoi(datos);
-                    printf("%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].cedula);
+                    //printf("%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].cedula);
                 }
                 if(control == 2){
                     strcpy((listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].nombre,datos);
-                    printf("%s\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].nombre);
+                    //printf("%s\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].nombre);
                 }
                 if(control == 3){
                     (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].semestre = atoi(datos);
-                    printf("%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].semestre);
+                    //printf("%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[linea].semestre);
                     control=0;
                     linea++;
                 }
