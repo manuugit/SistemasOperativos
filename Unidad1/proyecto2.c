@@ -28,11 +28,14 @@ void mdb(char[32], int);
 void ldb(char[32]);
 void lsdbs();
 void gdb();
+void sdb(char[32]);
 
 estudiante_t est;
 estudiante_t *pest = &est;
 libd_t listabd;
 libd_t *plbd= &listabd;
+int activa=0;
+char archivoact[32];
 
 int main(void){
     int maximobd =20;
@@ -49,6 +52,7 @@ int main(void){
     ldb("estudiantes2.txt");
     lsdbs();
     gdb();
+    sdb("estu");
     free(plbd->pdatabase);
     return 0;
 }
@@ -121,5 +125,11 @@ void gdb(){
     printf("%s %s|","Nombre",listabd.pdatabase[listabd.conteobd-1].nombrebd);
     printf("%s %d|","Tamaño max",listabd.pdatabase[listabd.conteobd-1].tamaño);
     printf("%s %d\n","Cantidad de registros disponibles",(listabd.pdatabase[listabd.conteobd-1].tamaño-listabd.pdatabase[listabd.conteobd-1].conteoEst));
+}
+
+void sdb(char nombre[32]){
+    activa=1;
+    strcpy(archivoact,listabd.pdatabase[listabd.conteobd-1].nombrebd);
+    strcat(archivoact,".txt");
 }
 
