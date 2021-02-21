@@ -42,6 +42,7 @@ libd_t listabd;
 libd_t *plbd= &listabd;
 int activa=0;
 char archivoact[32];
+int bdactiva;
 
 int main(void){
     int maximobd =20;
@@ -52,6 +53,7 @@ int main(void){
     char par3 [20];
     char salir;
     char fileF [32];
+    bdactiva = -1;
     //reserva de memoria para todas las bd
     plbd->pdatabase = (bd_t *)malloc(sizeof(bd_t)*maximobd);
 
@@ -133,7 +135,6 @@ void ldb(char archivo[32]){
     int linea=0;
     int control=0;
 
-    printf("%s %d\n","Base de datos activa:",listabd.conteobd-1);
     if((listabd.pdatabase+(listabd.conteobd-1))->existebd == 1){
         //abrir archivo para lectura
         archivof = fopen(archivo,"r");
@@ -183,14 +184,29 @@ void lsdbs(){
 
 void gdb(){
     printf("%s\n","Base de datos activa:");
-    printf("%s %s|","Nombre",listabd.pdatabase[listabd.conteobd-1].nombrebd);
-    printf("%s %d|","Tamaño max",listabd.pdatabase[listabd.conteobd-1].tamaño);
-    printf("%s %d\n","Cantidad de registros disponibles",(listabd.pdatabase[listabd.conteobd-1].tamaño-listabd.pdatabase[listabd.conteobd-1].conteoEst));
+    if (bdactiva != -1){
+        printf("%s %s|","Nombre",listabd.pdatabase[bdactiva].nombrebd);
+        printf("%s %d|","Tamaño max",listabd.pdatabase[bdactiva].tamaño);
+        printf("%s %d\n","Cantidad de registros disponibles",(listabd.pdatabase[bdactiva].tamaño-listabd.pdatabase[bdactiva].conteoEst));
+    }
+    else
+    {
+        printf("Todavía no se ha activado alguna base de datos, para hacerlo use el comando sdb\n");
+    }
+    
+    
 }
 
 void sdb(char nombre[32]){
     activa=1;
-    strcpy(archivoact,listabd.pdatabase[listabd.conteobd-1].nombrebd);
+    for(int i=0; i<listabd.conteobd; i++){
+        if (strcmp(listabd.pdatabase[i].nombrebd,nombre)==0){
+            bdactiva = i;
+            printf("%s %s %s\n","La base de datos",listabd.pdatabase[i].nombrebd,"se ha activado");
+            i = listabd.conteobd;
+        }
+    }
+    strcpy(archivoact,listabd.pdatabase[bdactiva].nombrebd);
     strcat(archivoact,".txt");
 }
 
@@ -203,14 +219,14 @@ void svdb(){
     }
     fprintf(archivoS,"ESTUDIANTES\n");
     fprintf(archivoS,"Cédula|Nombre|Semestre\n");
-    for (int i=0; i< ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst); i++){
-        fprintf(archivoS,"%d ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula);
-        fprintf(archivoS,"%s ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].nombre);
-        fprintf(archivoS,"%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].semestre);
+    for (int i=0; i< ((listabd.pdatabase+(bdactiva))->conteoEst); i++){
+        fprintf(archivoS,"%d ",(listabd.pdatabase+(bdactiva))->registroEstudiante[i].cedula);
+        fprintf(archivoS,"%s ",(listabd.pdatabase+(bdactiva))->registroEstudiante[i].nombre);
+        fprintf(archivoS,"%d\n",(listabd.pdatabase+(bdactiva))->registroEstudiante[i].semestre);
     }
 
     fclose(archivoS);
-    printf("%s %s %s %s\n", "La base de datos",(listabd.pdatabase+(listabd.conteobd-1))->nombrebd,"se escribió en el archivo",archivoact);
+    printf("%s %s %s %s\n", "La base de datos",(listabd.pdatabase+(bdactiva))->nombrebd,"se escribió en el archivo",archivoact);
     }
 
     else{
@@ -220,10 +236,10 @@ void svdb(){
 
 void radb(){
     if(activa ==1){
-        for (int i=0; i<(listabd.pdatabase+(listabd.conteobd-1))->conteoEst; i++){
-        printf("%d ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula);
-        printf("%s ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].nombre);
-        printf("%d\n",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].semestre);
+        for (int i=0; i<(listabd.pdatabase+(bdactiva))->conteoEst; i++){
+        printf("%d ",(listabd.pdatabase+(bdactiva))->registroEstudiante[i].cedula);
+        printf("%s ",(listabd.pdatabase+(bdactiva))->registroEstudiante[i].nombre);
+        printf("%d\n",(listabd.pdatabase+(bdactiva))->registroEstudiante[i].semestre);
     }
     }
     else{
@@ -233,7 +249,7 @@ void radb(){
 
 int rsdb(){
     if(activa ==1){
-        return (listabd.pdatabase+(listabd.conteobd-1))->conteoEst;
+        return (listabd.pdatabase+(bdactiva))->conteoEst;
     }
     else{
         printf("%s\n","Antes de usar este comando debe aplicar sdb nombre");
@@ -243,11 +259,11 @@ int rsdb(){
 
 void mreg(int cedula, char nombreEst[52],int semestre){
     if (activa ==1){
-        if ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst < (listabd.pdatabase+(listabd.conteobd-1))->tamaño){
-            (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].cedula= cedula;
-            strcpy((listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].nombre,nombreEst);
-            (listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[(listabd.pdatabase+(listabd.conteobd-1))->conteoEst].semestre= semestre;
-            (listabd.pdatabase+(listabd.conteobd-1))->conteoEst = ((listabd.pdatabase+(listabd.conteobd-1))->conteoEst)+1;
+        if ((listabd.pdatabase+(bdactiva))->conteoEst < (listabd.pdatabase+(bdactiva))->tamaño){
+            (listabd.pdatabase+(bdactiva))->registroEstudiante[(listabd.pdatabase+(bdactiva))->conteoEst].cedula= cedula;
+            strcpy((listabd.pdatabase+(bdactiva))->registroEstudiante[(listabd.pdatabase+(bdactiva))->conteoEst].nombre,nombreEst);
+            (listabd.pdatabase+(bdactiva))->registroEstudiante[(listabd.pdatabase+(bdactiva))->conteoEst].semestre= semestre;
+            (listabd.pdatabase+(bdactiva))->conteoEst = ((listabd.pdatabase+(bdactiva))->conteoEst)+1;
     }
         else{
             printf("Ya se alcanzo la capacidad maxima de la base de datos");
@@ -261,15 +277,15 @@ void mreg(int cedula, char nombreEst[52],int semestre){
 
 void rr(int cedula){
     int encontro = 0;
-    for (int i=0; i< ((listabd.pdatabase+(listabd.conteobd-1))->tamaño); i++){
-        if ((listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula == cedula){
-             printf("%d %s %d\n ",(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].cedula,(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].nombre,(listabd.pdatabase+(listabd.conteobd-1))->registroEstudiante[i].semestre);
+    for (int i=0; i< ((listabd.pdatabase+(bdactiva))->tamaño); i++){
+        if ((listabd.pdatabase+(bdactiva))->registroEstudiante[i].cedula == cedula){
+             printf("%d %s %d\n ",(listabd.pdatabase+(bdactiva))->registroEstudiante[i].cedula,(listabd.pdatabase+(bdactiva))->registroEstudiante[i].nombre,(listabd.pdatabase+(bdactiva))->registroEstudiante[i].semestre);
             encontro = 1;
-            i = (listabd.pdatabase+(listabd.conteobd-1))->tamaño;
+            i = (listabd.pdatabase+(bdactiva))->tamaño;
         }
     }
     if(encontro !=1){
-        printf("%s %s\n","Cedula no encontrada en",(listabd.pdatabase+(listabd.conteobd-1))->nombrebd);
+        printf("%s %s\n","Cedula no encontrada en",(listabd.pdatabase+(bdactiva))->nombrebd);
     }
 }
 
