@@ -46,25 +46,74 @@ char archivoact[32];
 int main(void){
     int maximobd =20;
     listabd.conteobd=0;
+    char comando [32];
+    char par1 [20];
+    char par2 [20];
+    char par3 [20];
+    char salir;
+    char fileF [32];
     //reserva de memoria para todas las bd
     plbd->pdatabase = (bd_t *)malloc(sizeof(bd_t)*maximobd);
-    mdb("bd1",20);
-    ldb("estudiantes.txt");
-    mdb("bd2",20);
-    ldb("estudiantes2.txt");
-    mdb("bd3",20);
-    ldb("estudiantes3.txt");
-    mdb("bd4",30);
-    ldb("estudiantes2.txt");
-    lsdbs();
-    gdb();
-    sdb("estu");
-    svdb();
-    radb();
-    printf("%d\n",rsdb());
-    mreg(45789652,"Esteban-Arango",5);
-    radb();
-    rr(100245679);
+
+     while(strcmp(comando,"exitP")!=0){
+        printf("\n%s","Escriba el comando\n");
+        scanf("\n%s",comando);
+        if (strcmp(comando,"mdb")==0){
+            scanf("%s %s",par1,par2);
+            mdb(par1, atoi(par2));
+        }
+        else if (strcmp(comando,"ldb")==0){
+            scanf("%s",par1);
+            printf("%s\n",par1);
+            ldb(par1);
+        }
+        else if (strcmp(comando,"lsdbs")==0){
+            lsdbs();
+        }
+        else if (strcmp(comando,"gdb")==0){
+            gdb();
+        }
+        else if (strcmp(comando,"sdb")==0){
+            scanf("%s",par1);
+            sdb(par1);
+            strcpy(fileF, par1);
+        }
+        else if (strcmp(comando,"svdb")==0){
+            svdb();
+        }
+        else if (strcmp(comando,"radb")==0){
+            radb();
+        }
+        else if (strcmp(comando,"rsdb")==0){
+            printf("%s %d\n","Cantidad de registros=",rsdb());
+        }
+        else if (strcmp(comando,"mreg")==0){
+            scanf("%s %s %s",par1,par2,par3);
+            mreg(atoi(par1),par2, atoi(par3));
+        }
+        else if (strcmp(comando,"rr")==0){
+            scanf("%s",par1);
+            rr(atoi(par1));
+        }
+        else if (strcmp(comando,"exitP")==0){
+            printf("\n");
+        }
+        else{
+            printf("Opcion invalida\n");
+        }
+
+        printf("Si desea salir utilice el comando exitP\n");
+    }
+        
+    salir = exitP();
+     if (salir== 's'){
+        svdb(fileF);
+        printf("Los datos se guardaron correctamente\n");
+    }
+    else{
+        printf("Los datos no se guardaron\n");
+    }
+    
     free(plbd->pdatabase);
     return 0;
 }
