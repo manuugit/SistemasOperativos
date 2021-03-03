@@ -1,3 +1,4 @@
+//programa que lee un archivo donde cada linea corresponde a una pareja clave valor, ordena las parejas por valor de mayor a menor y las escribe en un archivo de salida
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
