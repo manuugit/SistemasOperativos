@@ -1,6 +1,7 @@
 //programa que calcula el promedio de n argumentos enteros pasados desde línea de comandos
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[]) {
     float suma=0;
