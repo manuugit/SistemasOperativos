@@ -4,8 +4,8 @@
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-    char nombreA1 [50] = "archivop1.txt";
-    char nombreA2 [50] = "salidap1.txt";
+    char nombreA1 [50];
+    char nombreA2 [50];
     char clave[20];
     int valor;
     int valores[100]; //max 100
@@ -14,6 +14,10 @@ int main(int argc, char *argv[]) {
     int max=-1000;
     char claveMax[20];
     int pos;
+
+    //nombres de archivos pasados como argumentos del main
+    strcpy(nombreA1,argv[1]);
+    strcpy(nombreA2,argv[2]);
 
     //abrir archivo para lectura
     FILE *archivoEntrada = fopen(nombreA1, "r");

@@ -4,14 +4,18 @@
 #include <string.h>
 
 int main(int argc, char *argv[]) {
-    char nombreA1 [50] = "archivop1.txt";
-    char nombreA2 [50] = "salidap2.txt";
+    char nombreA1 [50];
+    char nombreA2 [50];
     char clave[20];
     int valor;
     int valores[100]; //max 100
     char claves[100][20]; //max 100 claves de max 20 caracteres
     int contlinea=0;
     
+    //nombres de los archivos pasados como argumentos del main
+    strcpy(nombreA1,argv[1]);
+    strcpy(nombreA2,argv[3]);
+
     //abrir archivo para lectura
     FILE *archivoEntrada = fopen(nombreA1, "r");
     if (archivoEntrada == NULL) {
