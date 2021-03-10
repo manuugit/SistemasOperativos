@@ -17,8 +17,6 @@ typedef struct archivoC{
     int cantidadlineas;
 } archivoC_t;
 
-linea_t lineaA;
-linea_t *plineaA= &lineaA;
 archivoC_t archivoComp;
 archivoC_t *parchivoComp =&archivoComp;
 
