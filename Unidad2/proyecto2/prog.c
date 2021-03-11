@@ -26,8 +26,10 @@ FILE *archivoEntrada;
 void *ordenarInverso(void*);
 void *ordenarAlfabeticamente(void*);
 
-int main(void){
-    char nombreA1 [50] = "archivoEp2.txt";
+int main(int argc, char *argv[]){
+    char nombreA1 [50];
+    char nombreA2 [50];
+    char nombreA3 [50];
     int contlinea = 0;
     char linea1 [63];
     int errorCondiciones=0;
@@ -35,9 +37,13 @@ int main(void){
     char ocupacionT[20];
     int edadT;
     char lineaS [63];
-
     pthread_t hilo1;
     pthread_t hilo2;
+
+    //nombres de archivos pasados desde argumentos del main
+    strcpy(nombreA1,argv[1]);
+    strcpy(nombreA2,argv[2]);
+    strcpy(nombreA3,argv[3]);
 
     //abrir archivo para lectura
     archivoEntrada = fopen(nombreA1, "r");
@@ -85,14 +91,14 @@ int main(void){
     
     fclose(archivoEntrada);
 
-    pthread_create(&hilo1, NULL, &ordenarInverso, "salida1.txt");
-    pthread_create(&hilo2, NULL, &ordenarAlfabeticamente, "salida2.txt");
+    pthread_create(&hilo1, NULL, &ordenarInverso, nombreA2);
+    pthread_create(&hilo2, NULL, &ordenarAlfabeticamente, nombreA3);
     pthread_join(hilo1,NULL);
     pthread_join(hilo2, NULL);
 
     //impresión de archivos de salida en pantalla
-    FILE *archivosalida1 = fopen("salida1.txt", "r");
-    FILE *archivosalida2 = fopen("salida2.txt", "r");
+    FILE *archivosalida1 = fopen(nombreA2, "r");
+    FILE *archivosalida2 = fopen(nombreA3, "r");
 
     printf("\nArchivo de salida 1\n");
     while (fgets(lineaS, sizeof(lineaS), archivosalida1) != NULL) {
@@ -103,6 +109,9 @@ int main(void){
     while (fgets(lineaS, sizeof(lineaS), archivosalida2) != NULL) {
         printf("%s",lineaS);
     }
+
+    fclose(archivosalida1);
+    fclose(archivosalida2);
 
     return 0;
 }
