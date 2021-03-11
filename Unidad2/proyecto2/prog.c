@@ -34,6 +34,7 @@ int main(void){
     char nombreT[20];
     char ocupacionT[20];
     int edadT;
+    char lineaS [63];
 
     pthread_t hilo1;
     pthread_t hilo2;
@@ -88,6 +89,21 @@ int main(void){
     pthread_create(&hilo2, NULL, &ordenarAlfabeticamente, "salida2.txt");
     pthread_join(hilo1,NULL);
     pthread_join(hilo2, NULL);
+
+    //impresión de archivos de salida en pantalla
+    FILE *archivosalida1 = fopen("salida1.txt", "r");
+    FILE *archivosalida2 = fopen("salida2.txt", "r");
+
+    printf("\nArchivo de salida 1\n");
+    while (fgets(lineaS, sizeof(lineaS), archivosalida1) != NULL) {
+        printf("%s",lineaS);
+    }
+
+    printf("\nArchivo de salida 2\n");
+    while (fgets(lineaS, sizeof(lineaS), archivosalida2) != NULL) {
+        printf("%s",lineaS);
+    }
+
     return 0;
 }
 
