@@ -112,7 +112,7 @@ int main(int argc, char *argv[]){
 
     fclose(archivosalida1);
     fclose(archivosalida2);
-
+    free(parchivoComp->plinea);
     return 0;
 }
 
