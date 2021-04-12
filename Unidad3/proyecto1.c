@@ -1,5 +1,6 @@
-//El proceso padre debe enviar al hijo el contenido de la cadena “mensaje_desde_el_padre” y el proceso hijo el contenido de la cadena “mensaje_desde_el_hijo”. 
-//(cadenas pasadas desde linea de comandos)
+//El proceso padre debe enviar al hijo el mensaje recibido por la entrada estandar en minuscula. 
+//el hijo recibe el mensaje y lo pasa a mayuscula, para luego devolverlo al padre
+//el padre finalmente muestra el mensaje recibido por la salida estandar
 
 #include <unistd.h>
 #include <stdlib.h>
