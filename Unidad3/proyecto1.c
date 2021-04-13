@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         for(;;) {
            
             read(fd1[0],cadena,40);
-            printf("Hijo leyó: %s\n",cadena);
+            //printf("Hijo leyó: %s\n",cadena);
             
 
             //convierte lo leido a mayuscula
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 
             /*direccion hijo padre*/
             write(fd2[1],cadena,40); //escribe en el pipe 2
-            printf("Hijo envia: %s\n",cadena);
+            //printf("Hijo envia: %s\n",cadena);
         }
         close(fd1[0]);
         close(fd2[1]);
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
             }
            
             write(fd1[1],cadena,40); //escribe en el pipe 1
-            printf("Padre envia: %s\n",cadena);
+            //printf("Padre envia: %s\n",cadena);
             
 
             /*direccion hijo padre, padre recibe mensaje del hijo*/
