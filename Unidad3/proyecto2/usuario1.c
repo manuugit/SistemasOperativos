@@ -1,4 +1,4 @@
-/* Filename: msgq_send.c ENVIO DE MENSAJES A LA COLA*/ 
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
