@@ -21,12 +21,13 @@ int main(void) {
 
     int msqid1;
     key_t key1;
-
     int msqid2;
     key_t key2;
+    pthread_t hiloEnvia;
+    pthread_t hiloRecibe;
+
     system("touch cola2.txt");
     
-
     //cola para enviar (cola 2)
     if ((key2 = ftok("cola2.txt", 'B')) == -1) {
         perror("ftok");
@@ -49,10 +50,6 @@ int main(void) {
         perror("msgget");
         exit(1);
     }
-
-    pthread_t hiloEnvia;
-    pthread_t hiloRecibe;
-
 
     printf("%d %d\n",msqid1,msqid2);
 
