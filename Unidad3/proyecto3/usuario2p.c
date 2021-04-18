@@ -23,32 +23,33 @@ sem_t *sem2;
 
 int main(void) {
    
-    int fd;
+    int shm_fd2;
+    int shm_fd1;
     pthread_t hiloEnvia;
     pthread_t hiloRecibe;
 
     //crea memoria compartida
-    int shm_fd2 = shm_open("MemoryObject2", O_CREAT | O_RDWR, 0600);
+    shm_fd2 = shm_open("MemoryObject2", O_CREAT | O_RDWR, 0600);
     if (shm_fd2 < 0) {
-         perror("shm memory error: ");
+         perror("shm2 memory error: ");
          exit(EXIT_FAILURE);
     }
     fprintf(stdout, "Shared memory is created with fd: %d\n", shm_fd2);
 
     if (ftruncate(shm_fd2, SH_SIZE2 * sizeof(char)) < 0) {
-        perror("Truncation failed: ");
+        perror("Truncation failed shm2: ");
         exit(EXIT_FAILURE);
     }
 
     fprintf(stdout, "The memory region is truncated.\n");
 
     //abre memoria 1
-    int shm_fd1 = shm_open("MemoryObject2", O_RDONLY, 0600);
-     if (shm_fd1 < 0) {
-         perror("shm memory error: ");
-         exit(EXIT_FAILURE);
-     }
-     fprintf(stdout, "Shared memory is created with fd: %d\n", shm_fd1);
+    shm_fd1 = shm_open("MemoryObject1", O_RDONLY, 0600);
+    if (shm_fd1 < 0) {
+        perror("shm1  memory error: ");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(stdout, "Shared memory is created with fd: %d\n", shm_fd1);
 
 
     pthread_create(&hiloEnvia, NULL, &enviarMensaje, shm_fd2);
@@ -61,7 +62,6 @@ int main(void) {
 }
 
 void *enviarMensaje(void *shm_fd){
-    int fd;
     int len;
     char buf[40];
     char* p;
@@ -83,31 +83,31 @@ void *enviarMensaje(void *shm_fd){
         p= (char*)map;
         strcpy(p,buf);
         printf("P=%s",p);
+
+        fprintf(stdout, "Data is written to the shared memory.\n");
+
+        //desmapear
+        if (munmap(p, SH_SIZE2) < 0) {
+            perror("Unmapping failed: ");
+            exit(EXIT_FAILURE);
+        }
     }
 
-    fprintf(stdout, "Data is written to the shared memory.\n");
-
-    if (munmap(p, SH_SIZE2) < 0) {
-         perror("Unmapping failed: ");
-         exit(EXIT_FAILURE);
+    //cerrar espacio de memoria
+    if (close(shm_fd) < 0) {
+        perror("Closing shm failed: ");
+        exit(EXIT_FAILURE);
      }
 
-
-     if (close(shm_fd) < 0) {
-         perror("Closing shm failed: ");
-         exit(EXIT_FAILURE);
-     }
-
-     if (shm_unlink("MemoryObject2") < 0) {
-         perror("Unlink failed: ");
-         exit(EXIT_FAILURE);
-     }
+    if (shm_unlink("MemoryObject2") < 0) {
+        perror("Unlink failed: ");
+        exit(EXIT_FAILURE);
+    }
 
     return 0;
 
 }
 void *recibirMensaje(void *shm_fd){
-    int fd;
     char *p;
 
     for(;;) { 
@@ -121,6 +121,7 @@ void *recibirMensaje(void *shm_fd){
 
         fprintf(stdout, "The contents of shared memory object: %s\n", p);
 
+        //desmapear
         if (munmap(p, SH_SIZE1) < 0) {
             perror("Unmapping failed: ");
             exit(EXIT_FAILURE);
