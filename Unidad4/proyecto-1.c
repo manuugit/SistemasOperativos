@@ -9,6 +9,7 @@
 #include <string.h>
 
 char tipoRetornado [32];
+int control;
 
 // Prototipado de funciones
 void identificarTipo(char ruta [512]);
@@ -24,7 +25,7 @@ int main(int argc, char **argv)
 {
     char tipo [32];
     char ruta [512];
-    strcpy(ruta,"../");
+    strcpy(ruta,argv[1]);
 
     if (argc != 2) {
         printf("usage: %s <pathname>\n", argv[0]);
@@ -61,38 +62,44 @@ void identificarTipo(char ruta [512]){
 void listarDirectorio(char ruta [512]){
     DIR *streamp; 
     struct dirent *dep; 
-    int control =0;
+    control++;
     char nuevaRuta [512];
     char tipo [32];
 
     streamp = opendir(ruta);
     errno = 0;
     
+
     while ((dep = readdir(streamp)) != NULL) {
         if(strcmp(dep->d_name, "..")!=0 && strcmp(dep->d_name, ".")!=0){
+             for(int i=0; i<=control;i++){
+                printf("-");
+            }
             strcpy(nuevaRuta, ruta);
-            printf("%s\n", nuevaRuta);
+            //printf("%s\n", nuevaRuta);
             strcat(nuevaRuta, dep->d_name);
-            printf("%s\n", nuevaRuta);
+            //printf("%s\n", nuevaRuta);
            
             identificarTipo(nuevaRuta);
             strcpy(tipo,tipoRetornado);
-
+           
+            //printf("%s",control);
             if (strcmp(tipo, "directory")==0){
-                printf("Found file: %s\n", dep->d_name);
-                printf("rutaA %s\n",nuevaRuta);
+                printf("Directorio: %s\n", dep->d_name);
+                //printf("rutaA %s\n",nuevaRuta);
                 strcat(nuevaRuta, "/");
                 listarDirectorio(nuevaRuta);
-                printf("ruta %s\n",nuevaRuta);
+                //printf("ruta %s\n",nuevaRuta);
             }
             else {
-                printf("Found file %s\n",dep->d_name);
-            }        
+                printf("Archivo %s\n", dep->d_name);
+            }       
         } 
     }
 
     if (errno != 0)
         unix_error("readdir error");
 
+    control--;
     closedir(streamp);
 }
