@@ -255,8 +255,7 @@ void * readThread(void *arg){
             break;
         }
         else if(-1 == numOfBytes){
-            perror("ReadThread read() fails: ");
-            break;
+            return 0;
         }
         else {
             if (clienteE->conectado ==1){
@@ -275,7 +274,8 @@ void * readThread(void *arg){
                 }
             }
             else{
-                printf("no es posible escribir\n");
+                printf("no es posible escribir, usuario esta desconectado\n");
+                
             }
         }
     }
