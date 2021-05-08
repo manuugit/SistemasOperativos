@@ -63,7 +63,6 @@ int main(int argc, char *argv[]){
         perror("Socket creation fails\n");
         exit(EXIT_FAILURE);
     }
-    //printf("Socket created\n");
 
      //3. Connect to the server 127.0.0.1:PORT
      // Prepare the address

@@ -133,22 +133,6 @@ int main(int argc, char *argv[]){
                 break;
             }
         }
-
-
-        /*while(1){
-            
-            if ( fgets(buf,BUF_SIZE,stdin) == NULL){
-                printf("Fgets NULL\n");
-            }
-
-            if( buf[ strlen(buf)-1 ] == '\n') buf[ strlen(buf) - 1 ] = 0;
-
-            status = write(client.socket, buf, strlen(buf)+1);
-            if(-1 == status){
-                perror("Server write to client fails: ");
-                break;
-            }
-        }*/
        
     }
 
@@ -184,22 +168,23 @@ int main(int argc, char *argv[]){
 
             if(encontro==1){
                 for(int i=0; i<=maxClientes; i++){
-                if((client+i)->conectado == 1 && (client+i)->conteoCliente !=control ){
-                    strcpy(buf, (client+control)->nombreCliente);
-                    strcat(buf, " ha abandonado el chat\n");
-                    status = write((client+i)->socket,buf, strlen(buf)+1);
-                    if(-1 == status){
-                        perror("Server write to client fails: ");
-                        break;
-                    }
-                }
-                if((client+i)->conteoCliente == control){
-                    strcpy(buf, "Te has desconectado\n");
-                    status = write((client+control)->socket,buf, strlen(buf)+1);
-                    close((client+control)->socket);
+                    if((client+i)->conectado == 1 && (client+i)->conteoCliente !=control ){
+                        printf(" envio a %s",(client+i)->nombreCliente);
+                        strcpy(buf, (client+control)->nombreCliente);
+                        strcat(buf, " ha abandonado el chat\n");
+                        status = write((client+i)->socket,buf, strlen(buf)+1);
                         if(-1 == status){
                             perror("Server write to client fails: ");
                             break;
+                        }
+                    }   
+                    if((client+i)->conteoCliente == control){
+                        strcpy(buf, "Te has desconectado\n");
+                        status = write((client+control)->socket,buf, strlen(buf)+1);
+                        close((client+control)->socket);
+                            if(-1 == status){
+                                perror("Server write to client fails: ");
+                                break;
                         }
                     }
                 }
@@ -209,11 +194,6 @@ int main(int argc, char *argv[]){
             }
 
             encontro=0;
-
-            /*for(int i=control; i<=maxClientes; i++){
-                (client+i)->conteoCliente = i;
-                printf("nuevos nums %d\n",(client+i)->conteoCliente);
-            }*/
             
         }
         else if (strcmp(comando,"show")==0){
@@ -278,19 +258,24 @@ void * readThread(void *arg){
             perror("ReadThread read() fails: ");
             break;
         }
-        else{
+        else {
+            if (clienteE->conectado ==1){
             strcat(buf, " -(");
             strcat(buf, clienteE->nombreCliente);
             strcat(buf, ")");
-            for(int i=0; i<=maxClientes; i++){
-                if ((client+i)->conectado == 1){
-                    status = write((client+i)->socket, buf, strlen(buf)+1);
+                for(int i=0; i<=maxClientes; i++){
+                    if ((client+i)->conectado == 1){
+                        status = write((client+i)->socket, buf, strlen(buf)+1);
+                    }
+                }
+
+                if(-1 == status){
+                    perror("Server write to client fails: ");
+                    break;
                 }
             }
-
-            if(-1 == status){
-                perror("Server write to client fails: ");
-                break;
+            else{
+                printf("no es posible escribir\n");
             }
         }
     }
